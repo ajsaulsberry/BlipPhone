@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlipPhone.Web", "BlipPhone.Web\BlipPhone.Web.csproj", "{D09EE18A-0A56-4EC8-B39C-3DBA78EC9CB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D09EE18A-0A56-4EC8-B39C-3DBA78EC9CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D09EE18A-0A56-4EC8-B39C-3DBA78EC9CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D09EE18A-0A56-4EC8-B39C-3DBA78EC9CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D09EE18A-0A56-4EC8-B39C-3DBA78EC9CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B65EED1-4CC9-44CB-9280-4CA1DE14E46A}
+	EndGlobalSection
+EndGlobal
