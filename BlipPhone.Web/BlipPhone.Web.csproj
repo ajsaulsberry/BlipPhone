@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="libphonenumber-csharp" Version="8.9.9" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
