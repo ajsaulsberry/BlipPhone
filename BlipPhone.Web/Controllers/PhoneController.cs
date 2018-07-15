@@ -6,26 +6,31 @@ using Microsoft.AspNetCore.Mvc;
 using BlipPhone.Web.Models;
 using PhoneNumbers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace BlipPhone.Web.Controllers
 {
     public class PhoneController : Controller
     {
-        private PhoneNumberUtil _phoneUtil;
-        private static IEnumerable<SelectListItem> _countryList;
+        private static PhoneNumberUtil _phoneUtil;
+        private Countries _countries;
 
-        public PhoneController(ICountries countries)
+        public PhoneController(IHostingEnvironment env)
         {
             _phoneUtil = PhoneNumberUtil.GetInstance();
-            _countryList = countries.CountrySelectList;
+            string hostingPath = Path.GetDirectoryName(env.ContentRootPath);
+            string dataPath = "BlipPhone.Web\\Data\\iso3166-slim-2.json";
+            _countries = new Countries(Path.Combine(hostingPath, dataPath));
         }
 
         public IActionResult Check()
         {
+
             var model = new PhoneNumberCheckViewModel()
             {
                 CountryCodeSelected = "US",
-                Countries = _countryList
+                Countries = _countries.CountrySelectList
             };
             return View(model);
         }
@@ -68,7 +73,7 @@ namespace BlipPhone.Web.Controllers
 
                     // Because the Countries property of the view model doesn't exist at this point (it's not passed back by
                     // the model binder when the form is submitted) it can be assigned directly before being returned to the view.
-                    model.Countries = _countryList;
+                    model.Countries = _countries.CountrySelectList;
 
                     return View(model);
                 }
@@ -80,12 +85,12 @@ namespace BlipPhone.Web.Controllers
                 }
             }
 
-            // If there is an unspecified ModelState error or a NumberParseException, repopulate the model and return to the view.
+            // If there is an unspecified ModelState error or a NumberParseException repopulate the model and return to the view.
             ModelState.FirstOrDefault(x => x.Key == nameof(model.CountryCodeSelected)).Value.RawValue =
                 model.CountryCodeSelected;
             ModelState.FirstOrDefault(x => x.Key == nameof(model.PhoneNumberRaw)).Value.RawValue =
                 model.PhoneNumberRaw;
-            model.Countries = _countryList;
+            model.Countries = _countries.CountrySelectList;
 
             return View(model);
         }
