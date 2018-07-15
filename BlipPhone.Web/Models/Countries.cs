@@ -19,41 +19,16 @@ namespace BlipPhone.Web.Models
     public class Countries : ICountries
     {
         private readonly IHostingEnvironment _env;
-        private static IEnumerable<Country> _countryList;
-        private static IEnumerable<SelectListItem> _countrySelectList;
 
-        public IEnumerable<SelectListItem> CountrySelectList
-        {
-            get => _countrySelectList;
-            set => _countrySelectList = value;
-        }
+        public IEnumerable<SelectListItem> CountrySelectList { get; set; }
 
-        public IEnumerable<Country> CountryList
-        {
-            get => _countryList;
-            set => _countryList = value;
-        }
+        public IEnumerable<Country> CountryList { get; set; }
 
         public Countries(IHostingEnvironment env)
         {
             _env = env;
-            _countryList = SeedCountries(Path.GetDirectoryName(_env.ContentRootPath));
-            _countrySelectList = SetCountriesSelectList();
-        }
-
-        private IEnumerable<SelectListItem> SetCountriesSelectList()
-        {
-            var countryList = new List<SelectListItem>();
-            foreach (var c in _countryList)
-            {
-                var country = new SelectListItem
-                {
-                    Value = c.IsoAlpha2,
-                    Text = c.CountryNameEnglish
-                };
-                countryList.Add(country);
-            }
-            return countryList;
+            CountryList = SeedCountries(Path.GetDirectoryName(_env.ContentRootPath));
+            CountrySelectList = SetCountriesSelectList();
         }
 
         private IEnumerable<Country> SeedCountries(string hostingPath)
@@ -62,6 +37,21 @@ namespace BlipPhone.Web.Models
             var json = File.ReadAllText(filePath);
             var countries = JsonConvert.DeserializeObject<IEnumerable<Country>>(json);
             return countries;
+        }
+
+        private IEnumerable<SelectListItem> SetCountriesSelectList()
+        {
+            var countrySelectList = new List<SelectListItem>();
+            foreach (var c in CountryList)
+            {
+                var country = new SelectListItem
+                {
+                    Value = c.IsoAlpha2,
+                    Text = c.CountryNameEnglish
+                };
+                countrySelectList.Add(country);
+            }
+            return countrySelectList;
         }
     }
 

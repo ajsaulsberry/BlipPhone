@@ -17,7 +17,7 @@ namespace BlipPhone.Web.Controllers
         public PhoneController(ICountries countries)
         {
             _phoneUtil = PhoneNumberUtil.GetInstance();
-            _countryList = countries.GetCountriesSelectList();
+            _countryList = countries.CountrySelectList;
         }
 
         public IActionResult Check()
