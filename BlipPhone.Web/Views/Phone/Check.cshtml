@@ -1,0 +1,70 @@
+﻿@model BlipPhone.Web.Models.PhoneNumberCheckViewModel
+
+@{
+    ViewData["Title"] = "Check";
+}
+
+<h2>Check Phone Number</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+      <form asp-action="Check">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+          <label asp-for="CountryCodeSelected" class="control-label"></label>
+          <select asp-for="CountryCodeSelected" asp-items="@Model?.Countries" id="Country" class="form-control" autofocus="autofocus">
+            <option>-- select a country --</option>
+          </select>
+          <span asp-validation-for="CountryCodeSelected" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="PhoneNumberRaw" class="control-label"></label>
+          <input asp-for="PhoneNumberRaw" class="form-control" />
+          <span asp-validation-for="PhoneNumberRaw" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Check" class="btn btn-default" />
+        </div>
+
+        <br /> 
+        <h2>Results</h2>
+        <hr />
+        <div class="form-group">
+          <div class="checkbox">
+            <label>
+              <input asp-for="Valid" /> @Html.DisplayNameFor(model => model.Valid)
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label asp-for="PhoneNumberType" class="control-label"></label>
+          <input asp-for="PhoneNumberType" class="form-control" readonly="readonly" />
+          <span asp-validation-for="PhoneNumberType" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="CountryCode" class="control-label"></label>
+          <input asp-for="CountryCode" class="form-control" readonly="readonly" />
+          <span asp-validation-for="CountryCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="PhoneNumberFormatted" class="control-label"></label>
+          <input asp-for="PhoneNumberFormatted" class="form-control" readonly="readonly" />
+          <span asp-validation-for="PhoneNumberFormatted" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="PhoneNumberMobileDialing" class="control-label"></label>
+          <input asp-for="PhoneNumberMobileDialing" class="form-control" readonly="readonly" />
+          <span asp-validation-for="PhoneNumberMobileDialing" class="text-danger"></span>
+        </div>
+      </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to Home</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
