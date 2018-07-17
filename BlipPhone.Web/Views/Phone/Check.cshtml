@@ -27,13 +27,20 @@
           <input type="submit" value="Check" class="btn btn-default" />
         </div>
 
-        <br /> 
+        <br />
         <h2>Results</h2>
         <hr />
         <div class="form-group">
           <div class="checkbox">
             <label>
               <input asp-for="Valid" /> @Html.DisplayNameFor(model => model.Valid)
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="checkbox">
+            <label>
+              <input asp-for="HasExtension" /> @Html.DisplayNameFor(model => model.HasExtension)
             </label>
           </div>
         </div>

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using BlipPhone.Web.Models;
-using PhoneNumbers;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System.Linq;
+using BlipPhone.Web.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using PhoneNumbers;
 
 namespace BlipPhone.Web.Controllers
 {
@@ -26,7 +23,6 @@ namespace BlipPhone.Web.Controllers
 
         public IActionResult Check()
         {
-
             var model = new PhoneNumberCheckViewModel()
             {
                 CountryCodeSelected = "US",
@@ -44,7 +40,7 @@ namespace BlipPhone.Web.Controllers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -54,7 +50,7 @@ namespace BlipPhone.Web.Controllers
                     // Use the PhoneNumber object to get information from the utility and assign it to the raw state of the model.
                     // The values can't be assigned directly to the model because they have previously existing models.
                     // ASP.NET Core Tag Helpers work differently than Html Helpers in this respect (and others).
-                    ModelState.FirstOrDefault(x => x.Key == nameof(model.Valid)).Value.RawValue = 
+                    ModelState.FirstOrDefault(x => x.Key == nameof(model.Valid)).Value.RawValue =
                         _phoneUtil.IsValidNumberForRegion(phoneNumber, model.CountryCodeSelected);
                     ModelState.FirstOrDefault(x => x.Key == nameof(model.PhoneNumberType)).Value.RawValue =
                         _phoneUtil.GetNumberType(phoneNumber);
@@ -64,6 +60,9 @@ namespace BlipPhone.Web.Controllers
                         _phoneUtil.FormatOutOfCountryCallingNumber(phoneNumber, model.CountryCodeSelected);
                     ModelState.FirstOrDefault(x => x.Key == nameof(model.PhoneNumberMobileDialing)).Value.RawValue =
                         _phoneUtil.FormatNumberForMobileDialing(phoneNumber, model.CountryCodeSelected, true);
+
+                    ModelState.FirstOrDefault(x => x.Key == nameof(model.HasExtension)).Value.RawValue =
+                        phoneNumber.HasExtension;
 
                     // The submitted value has to be returned as the raw value.
                     ModelState.FirstOrDefault(x => x.Key == nameof(model.CountryCodeSelected)).Value.RawValue =
@@ -85,12 +84,32 @@ namespace BlipPhone.Web.Controllers
                 }
             }
 
-            // If there is an unspecified ModelState error or a NumberParseException repopulate the model and return to the view.
-            ModelState.FirstOrDefault(x => x.Key == nameof(model.CountryCodeSelected)).Value.RawValue =
-                model.CountryCodeSelected;
-            ModelState.FirstOrDefault(x => x.Key == nameof(model.PhoneNumberRaw)).Value.RawValue =
-                model.PhoneNumberRaw;
+            // If there is an unspecified ModelState error or a NumberParseException
+            // repopulate the list of countries, selected country, and attempted phone number.
+            // Clear the values of the results in both the ModelState values and the model.
+            // Doing both is required by MVC handling of Tag Helpers. For Html Helpers, only
+            // the model values need to be reset.
+            // In production code, the results section would best be implemented with a partial
+            // page with its own view model, which could then be reinitialized for each new
+            // attempt. It's handled this way to keep the focus on the library functionality.
+
             model.Countries = _countries.CountrySelectList;
+
+            ModelState.SetModelValue(nameof(model.CountryCodeSelected), model.CountryCodeSelected, model.CountryCodeSelected);
+            ModelState.SetModelValue(nameof(model.PhoneNumberRaw), model.PhoneNumberRaw, model.PhoneNumberRaw);
+
+            ModelState.SetModelValue(nameof(model.Valid), false, null);
+            model.Valid = false;
+            ModelState.SetModelValue(nameof(model.HasExtension), false, null);
+            model.HasExtension = false;
+            ModelState.SetModelValue(nameof(model.PhoneNumberType), null, null);
+            model.PhoneNumberType = null;
+            ModelState.SetModelValue(nameof(model.CountryCode), null, null);
+            model.CountryCode = null;
+            ModelState.SetModelValue(nameof(model.PhoneNumberFormatted), null, null);
+            model.PhoneNumberFormatted = null;
+            ModelState.SetModelValue(nameof(model.PhoneNumberMobileDialing), null, null);
+            model.PhoneNumberMobileDialing = null;
 
             return View(model);
         }

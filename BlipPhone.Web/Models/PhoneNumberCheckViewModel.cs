@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BlipPhone.Web.Models
@@ -26,6 +22,9 @@ namespace BlipPhone.Web.Models
 
         [Display(Name = "Valid Number")]
         public bool Valid { get; set; }
+
+        [Display(Name = "Has Extension")]
+        public bool HasExtension { get; set; }
 
         [Display(Name = "Validated Type")]
         public string PhoneNumberType { get; set; }
