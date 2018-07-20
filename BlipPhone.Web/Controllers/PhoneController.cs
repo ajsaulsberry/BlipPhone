@@ -57,7 +57,7 @@ namespace BlipPhone.Web.Controllers
                     ModelState.FirstOrDefault(x => x.Key == nameof(model.CountryCode)).Value.RawValue =
                         _phoneUtil.GetRegionCodeForNumber(phoneNumber);
                     ModelState.FirstOrDefault(x => x.Key == nameof(model.PhoneNumberFormatted)).Value.RawValue =
-                        _phoneUtil.FormatOutOfCountryCallingNumber(phoneNumber, model.CountryCodeSelected);
+                        _phoneUtil.FormatOutOfCountryCallingNumber(phoneNumber, "US");
                     ModelState.FirstOrDefault(x => x.Key == nameof(model.PhoneNumberMobileDialing)).Value.RawValue =
                         _phoneUtil.FormatNumberForMobileDialing(phoneNumber, model.CountryCodeSelected, true);
 
